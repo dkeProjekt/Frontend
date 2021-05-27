@@ -7,7 +7,7 @@ class Profile extends Component {
         super();
         this.state = {
             username: localStorage.getItem("user"),
-            password: localStorage.getItem("pwd"),
+            id: localStorage.getItem("id"),
             username_show: '',
             email: '',
             registration_date: '',
@@ -16,16 +16,14 @@ class Profile extends Component {
     }
 
     async handleShowData() {
-        console.log(localStorage.getItem("user"))
-        console.log(localStorage.getItem("pwd"))
         console.log(this.state.username)
-        console.log(this.state.password)
+        console.log(this.state.id)
         const response = await axios({
             method: 'POST',
             url: 'http://localhost:5003/get_personal_data',
             data: {
                 username: this.state.username,
-                password: this.state.password
+                id: this.state.id
             },
             headers: '',
         }).then(response => {
