@@ -22,17 +22,58 @@ class SignUpPage extends Component {
     }
 
     async handleSubmit(evt) {
-
-        // TODO: Neuen Eintrag in neo4j erzeugen. Die in neo4j automatisch generierte ID auslesen. Registrierung ist
-        //  jedoch nur erfolgreich wenn der Username noch Verfügbar ist usw. Wenn also schon eine ID generiert wurde, die
-        //  Registrierung aber fehlschlägt soll nicht nochmal eine neue generiert werden (eigentlich müsste die generiterte
-        //  wieder gelöscht werden, falls der User es nach ein paar Versuchen aufgibt sich zu registrieren aber schon eine ID erzeugt wurde).
-        if (this.state.id === '') {
-            this.state.id = "todo"
-        }
-        // TODO: REST call darf nur gemacht werden, wenn erfolgreich eine ID erzeugt wurde.
-
         evt.preventDefault();
+
+        if (this.state.id === '') { // no id in neo4j yet, thus generate an entry in neo4j
+
+        /*    const response0 = await axios({
+                method: 'GET',
+                url: 'http://localhost:8080/api/person/test',
+               // headers: {'Access-Control-Allow-Origin': true},
+                mode: 'cors',
+                //headers: ''
+               // headers: 'Access-Control-Allow-Origin: *'
+                headers: { 'Access-Control-Allow-Origin': '*' }
+            }).then(response => {
+                    console.log("Sign up in follow db was successful!")
+                    console.log(response.data);
+                    this.setState({message: "Signing Up failed: " + response.data.error});
+                }
+            ).catch(error => {
+                console.log("Signing Up failed!")
+                this.setState({message: "Signing Up: " + error});
+            });
+         */
+
+            const response = await axios({
+                method: 'POST',
+                url: 'http://localhost:8080/api/person/',
+                data: {
+                    "name":this.state.username,
+                    "persons" : {}
+                },
+                headers: ''
+            }).then(response => {
+                if (response.data.signup_successful) {
+                    console.log("Sign up in follow db was successful!")
+                    this.setState({id: response.data.entityId});
+                    console.log(response.data.entityId);
+                    console.log(response.data.persons);
+                } else {
+                    console.log("Signing Up failed!")
+                    this.setState({message: "Signing Up failed: " + response.data.error});
+                }
+            }).catch(error => {
+                console.log("Signing Up failed!")
+                this.setState({message: "Signing Up: " + error});
+            });
+        }
+
+        if (this.state.id === '') {
+            return;
+        }
+
+
         if (this.state.password === this.state.passwordRep) {
             // send the username and password to the login server
             const response = await axios({

@@ -9,6 +9,7 @@ class Follow extends Component {
             username: localStorage.getItem("user"),
             id: localStorage.getItem("id"),
             username_to_follow: '',
+            id_of_user_to_follow: '',
             message: '',
             users: []
         };
@@ -59,32 +60,62 @@ class Follow extends Component {
 
     async handleSubmit(evt) {
         evt.preventDefault();
-        // send the username to the follow server in order to check if the user exists (in the mongoDB) and follow him, in case he exists
-        // TODO: zwei möglichkeiten:
-        //  1. entweder zuerst mit einem REST call von der MongoDB die ID des Users holen dem gefolgt werden soll und
-        //  dann einen REST call an das Follow Backend machen.
-        //  2. oder alles am Follow Backend machen, d.h. die beiden user names an das follow Backend schicken und dort die IDs aus der MongoDB abfragen
 
-        const response = await axios({
-            method: 'POST',
-            url: 'http://localhost:5004/follow',
-            data: {
-                username_follower: this.state.username,
-                username_to_follow: this.state.username_to_follow,
+        // send the username_to_follow to the mongoDB to get his neo4j id -> in der aktuellen implementierung nicht benötigt, da follow service nur den namen braucht
+        /*
+        const response0 = await axios({
+            method: 'GET',
+            baseURL: 'http://localhost:5004/get_id_of_user/',
+            params: {
+                username: this.state.username_to_follow,
             },
             headers: '',
         }).then(response => {
-            if(response.data.follow_successful) {
-                console.log("Follow was successful!")
-                this.setState({message: 'You now follow!' + this.state.username_to_follow});
+            if(response.data.get_id_of_user_successful) {
+                console.log("Receiving id of user to follow successful!")
+                console.log(response.data.id)
+                this.setState({id_of_user_to_follow: response.data.id});
             } else {
-                console.log("Follow failed!")
-                this.setState({message: "Follow failed: " + response.data.error});
+                console.log("Receiving id of user to follow failed!")
+                this.setState({message: "Receiving id of user to follow failed: " + response.data.error});
             }
         }).catch(error => {
-            console.log("Follow failed!")
-            this.setState({message: "Follow failed: " + error});
+            console.log("Receiving id of user to follow failed!")
+            this.setState({message: "Receiving id of user to follow failed: " + error});
         });
+        */
+
+        // send the username to the follow server in order to check if the user exists (in the mongoDB) and follow him, in case he exists
+        if (this.state.id_of_user_to_follow !== '') {
+            const response1 = await axios({
+                method: 'PATCH',
+                baseURL: 'localhost:8080/api/person/',
+                params: {
+                    id: this.state.id,
+                },
+                data: {
+                    "name": this.state.username,
+                    "persons" : this.state.username_to_follow
+                },
+                headers: '',
+                // mode: 'cors',
+                // headers: {'Access-Control-Allow-Origin': true},
+                // headers: 'Access-Control-Allow-Origin: *'
+                // headers: { 'Access-Control-Allow-Origin': '*' }
+            }).then(response => {
+                if (response.data.follow_successful) {
+                    console.log("Follow was successful!")
+                    console.log(response.data.persons)
+                    this.setState({message: 'You now follow!' + this.state.username_to_follow});
+                } else {
+                    console.log("Follow failed!")
+                    this.setState({message: "Follow failed: " + response.data.error});
+                }
+            }).catch(error => {
+                console.log("Follow failed!")
+                this.setState({message: "Follow failed: " + error});
+            });
+        }
     };
 
     createFollowLabelsButtons = () => {
