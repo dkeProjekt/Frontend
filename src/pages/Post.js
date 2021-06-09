@@ -1,15 +1,22 @@
 import React, { Component } from "react";
+import PostEmotion from "../components/PostEmotion";
 
+let container = {
+    border: '2px solid lightgray',
+    width: '480px',
+    margin: 'auto'
+}
 
 class Post extends Component {
     constructor() {
         super();
     }
 
+
     render() {
         return (
-            <div>
-                <label>Here you can post a status.</label>
+            <div style={container}>
+                <PostEmotion/>
             </div>
         );
     }
