@@ -43,7 +43,7 @@ export default class PostEmotion extends React.Component{
 
     render (){
         let buttonStyle = {
-            width: '34px',
+            width: 'auto',
             height: '34px',
             margin: '20px 10px 0 40px',
             float: 'left',
