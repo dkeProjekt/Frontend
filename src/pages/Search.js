@@ -1,4 +1,11 @@
 import React, { Component } from "react";
+import RealSearch from "../components/RealSearch";
+
+let container = {
+    border: '2px solid lightgray',
+    width: '480px',
+    margin: 'auto'
+}
 
 
 class Search extends Component {
@@ -7,8 +14,8 @@ class Search extends Component {
     }
     render() {
         return(
-            <div>
-                <label>Here you can search for other users or posts.</label>
+            <div style={container}>
+                <RealSearch/>
             </div>
         );
     }
