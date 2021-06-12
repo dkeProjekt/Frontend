@@ -9,7 +9,6 @@ export default class PostEmotion extends React.Component{
         username: localStorage.getItem("user"),
         chosenEmoji:'',
         content:'',
-        emojiUnicode:'',
         timeStamp:''
     }
 
@@ -22,7 +21,7 @@ export default class PostEmotion extends React.Component{
 
         const shortpost = {
             user: this.state.username,
-            emotion: this.state.emojiUnicode,
+            emotion: this.state.chosenEmoji.emoji,
             content: this.state.content,
             timeStamp: new Date(Date.now())
         };
@@ -63,7 +62,6 @@ export default class PostEmotion extends React.Component{
 
         const onEmojiClick = (event, emojiObject) => {
             this.setState({chosenEmoji: emojiObject});
-            this.setState({emojiUnicode: '&#x' + emojiObject.unified + ';'});
         }
 
         return (
