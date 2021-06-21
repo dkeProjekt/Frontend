@@ -24,41 +24,21 @@ class SignUpPage extends Component {
     async handleSubmit(evt) {
         evt.preventDefault();
 
-        if (this.state.id === '') { // no id in neo4j yet, thus generate an entry in neo4j
-
-        /*    const response0 = await axios({
-                method: 'GET',
-                url: 'http://localhost:8080/api/person/test',
-               // headers: {'Access-Control-Allow-Origin': true},
-                mode: 'cors',
-                //headers: ''
-               // headers: 'Access-Control-Allow-Origin: *'
-                headers: { 'Access-Control-Allow-Origin': '*' }
-            }).then(response => {
-                    console.log("Sign up in follow db was successful!")
-                    console.log(response.data);
-                    this.setState({message: "Signing Up failed: " + response.data.error});
-                }
-            ).catch(error => {
-                console.log("Signing Up failed!")
-                this.setState({message: "Signing Up: " + error});
-            });
-         */
+        if (this.state.password === this.state.passwordRep) {
+            // send username, email and password to the signup service (microservice makes entry in mongoDB)
 
             const response = await axios({
                 method: 'POST',
-                url: 'http://localhost:8080/api/person/',
+                url: 'http://localhost:5002/signup',
                 data: {
-                    "name":this.state.username,
-                    "persons" : {}
+                    email: this.state.email,
+                    username: this.state.username,
+                    password: this.state.password,
                 },
-                headers: ''
+                headers: '',
             }).then(response => {
                 if (response.data.signup_successful) {
-                    console.log("Sign up in follow db was successful!")
-                    this.setState({id: response.data.entityId});
-                    console.log(response.data.entityId);
-                    console.log(response.data.persons);
+                    console.log("Sign up in mongoDB was successful!")
                 } else {
                     console.log("Signing Up failed!")
                     this.setState({message: "Signing Up failed: " + response.data.error});
@@ -67,28 +47,18 @@ class SignUpPage extends Component {
                 console.log("Signing Up failed!")
                 this.setState({message: "Signing Up: " + error});
             });
-        }
 
-        if (this.state.id === '') {
-            return;
-        }
-
-
-        if (this.state.password === this.state.passwordRep) {
-            // send the username and password to the login server
-            const response = await axios({
+            // send username to Follow Service (microservice creates entry in follow DB (neo4j))
+            await axios({
                 method: 'POST',
-                url: 'http://localhost:5002/signup',
+                url: 'http://localhost:5005/create',
                 data: {
-                    email: this.state.email,
-                    username: this.state.username,
-                    password: this.state.password,
-                    id: this.state.id
+                    name: this.state.username,
                 },
                 headers: '',
             }).then(response => {
-                if (response.data.signup_successful) {
-                    console.log("Sign up was successful!")
+                if (response.data.created) {
+                    console.log("Sign up in neo4j was successful!")
                     this.setState({message: 'Signing Up was successful!'});
 
                     // after a successful signup, the user should automatically be logged in, therefore
@@ -103,6 +73,8 @@ class SignUpPage extends Component {
                 console.log("Signing Up failed!")
                 this.setState({message: "Signing Up: " + error});
             });
+
+
         } else {
             this.setState({message: "You entered two different passwords!"});
         }

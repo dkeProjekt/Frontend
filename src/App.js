@@ -18,7 +18,7 @@ class App extends React.Component {
     componentDidMount() {
         // here the local storage is cleared when the page is loaded, to make sure that no user is logged in when the page
         // is loaded
-        localStorage.clear()
+        //localStorage.clear()
     }
 
     render() {
