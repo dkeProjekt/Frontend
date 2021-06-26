@@ -10,32 +10,20 @@ export default class RealSearch extends React.Component {
     state = {
         posts: [],
         counter: 0,
-        searchTerm: ''
+        searchTerm: []
     }
 
     handleChange = event => {
-        this.setState({ searchTerm: event.target.value });
+        this.setState( {searchTerm: {sort: [{timeStamp: "desc"}],query: {multi_match: {query: event.target.value, fields:["user", "content"]}}}})
     }
 
     handleSubmit = post => {
         post.preventDefault();
 
+        console.log(this.state.searchTerm)
         
-        axios.get('http://localhost:9200/postindex/post/_search', {
-            data: {
-                query: {
-                    mulit_match: {
-                        query: this.state.searchTerm,
-                        fields: "[user, content]"
-                    }
-                },
-                sort: [
-                    {
-                        timestamp: "desc"
-                    }
-                ]
-            }
-        }).then(res => {
+        axios.post('http://localhost:9200/postindex/post/_search', this.state.searchTerm)
+        .then(res => {
             console.log('Posts' + res.data);
             const posts = res.data.hits.hits;
 
@@ -73,7 +61,7 @@ export default class RealSearch extends React.Component {
             <div>
                 <p>
                     <form onSubmit={this.handleSubmit}>
-                        <input style={inputStyle} type="text" placeholder="What are you looking for?" value={this.state.searchTerm} onChange={this.handleChange}/><button type="submit" style={buttonStyle}>search</button>
+                        <input style={inputStyle} type="text" placeholder="What are you looking for?"  onChange={this.handleChange}/><button type="submit" style={buttonStyle}>search</button>
                     </form>
                 </p>
                 
@@ -85,7 +73,7 @@ export default class RealSearch extends React.Component {
                                     <td> {post._source.user}</td>
                                     <td> {post._source.emotion}</td>
                                     <td> {post._source.content}</td>
-                                    <td> {Moment(post._source.timestamp).format('DD MM YYYY')}</td>
+                                    <td> {Moment(post._source.timeStamp).format('lll')}</td>
                                 </tr>
                             );
                         })}
