@@ -8,7 +8,7 @@ export default class PersonalFeed extends React.Component {
     }
 
     state = {
-        currentUser: {query: {match: { user: localStorage.getItem("user")}}},
+        currentUser: {sort: [{timeStamp: "desc"}],query: {match: { user: localStorage.getItem("user")}}},
         posts: [],
         counter: 0
     }
@@ -31,7 +31,6 @@ export default class PersonalFeed extends React.Component {
     }
 
     render() {
-        Moment.locale('de');
 
         var ev;
         ev = this.state.posts
@@ -42,10 +41,10 @@ export default class PersonalFeed extends React.Component {
                         {ev.map((post) => {                        
                             return (
                                 <tr>
-                                    <td> {post._source.user}</td>
-                                    <td> {post._source.emotion}</td>
-                                    <td> {post._source.content}</td>
-                                    <td> {Moment(post._source.timestamp).format('DD MM YYYY')}</td>
+                                    <td> {post._source.user} </td>
+                                    <td> {post._source.emotion} </td>
+                                    <td> {post._source.content} </td>
+                                    <td> {Moment(post._source.timeStamp).format('lll')}</td>
                                 </tr>
                             );
                         })}
