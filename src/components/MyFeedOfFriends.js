@@ -2,26 +2,34 @@ import React from 'react';
 import axios from 'axios';
 import Moment from 'moment'
 
-export default class FeedOfFriends extends React.Component {
+export default class MyFeedOfFriends extends React.Component {
     constructor(props) {
         super(props);
     }
 
     state = {
         friends: [],
-        user: localStorage.getItem("user"),
+        currentUser: {sort: [{timeStamp: "desc"}],query: {match: { user: localStorage.getItem("user")}}},
         posts: [],
-        counter: 0
+        counter: 0,
+        username: localStorage.getItem("user")
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         console.log('Mount!')
-
-        axios.get('http://localhost:5005/getfollowed/', {name: this.state.user})
-        .then(res => {
+        await axios({
+            method: 'GET',
+            url: 'http://localhost:5005/getfollowed/',
+            params: {
+                name: this.state.username,
+            },
+            data: {},
+            headers: '',
+        }).then(res => {
             if(res.data.get_all_users_following_successful) {
                 this.setState({friends: JSON.parse(res.data.list_of_users_following)})
                 console.log("Users following loaded!")
+                console.log(this.state.friends)
             } else {
                 console.log("No Users followed!")
             }
@@ -29,22 +37,18 @@ export default class FeedOfFriends extends React.Component {
             console.log(error)
         });
 
+        const query = {sort: [{timeStamp: "desc"}],query: {match: {user : JSON.stringify(this.state.friends)}}}
 
-        this.state.friends.map(friend => {
-            const query = {query: {match: {user: friend.FOLGT.name}}}
             axios.post('http://localhost:9200/postindex/post/_search', query)
-            .then(res => {
-                console.log('Post' + res.data.hits.hits);
-                this.setState(state => {
-                    const posts = state.posts.concat(res.data.hits.hits);
-                    return {
-                      posts
-                    };
-                  });
-            }).catch(function (error) {
-                console.log(error)
-            })
-        });
+        .then(res => {
+            console.log('Personal Posts' + res.data.hits.hits);
+            const posts = res.data.hits.hits;
+            console.log(localStorage.getItem("user"));
+
+            this.setState({ posts })
+        }).catch(function (error)  {
+            console.log(error + ' Fehler! Code: ' + error.status);
+        })
     }
 
     render() {

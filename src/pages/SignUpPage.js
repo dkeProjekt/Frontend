@@ -10,8 +10,7 @@ class SignUpPage extends Component {
             username: '',
             password: '',
             passwordRep: '',
-            email: '',
-            id: ''
+            email: ''
         };
 
         this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -63,8 +62,7 @@ class SignUpPage extends Component {
 
                     // after a successful signup, the user should automatically be logged in, therefore
                     // the username and the id is saved in the local storage (see loginPage for a explanation of local storage)
-                    localStorage.setItem('user', response.data.username)
-                    localStorage.setItem('id', response.data.id)
+                    localStorage.setItem('user', this.state.username)
                 } else {
                     console.log("Signing Up failed!")
                     this.setState({message: "Signing Up failed: " + response.data.error});

@@ -7,7 +7,6 @@ class Settings extends Component {
         super();
         this.state = {
             username: localStorage.getItem("user"),
-            id: localStorage.getItem("id"),
             password_old: '',
             password_new: '',
             password_new_rep: '',

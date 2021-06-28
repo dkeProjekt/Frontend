@@ -7,7 +7,6 @@ class Profile extends Component {
         super();
         this.state = {
             username: localStorage.getItem("user"),
-            id: localStorage.getItem("id"),
             username_show: '',
             email: '',
             registration_date: '',
@@ -23,7 +22,6 @@ class Profile extends Component {
             url: 'http://localhost:5003/get_personal_data',
             data: {
                 username: this.state.username,
-                id: this.state.id
             },
             headers: '',
         }).then(response => {
