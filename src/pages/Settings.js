@@ -34,8 +34,7 @@ class Settings extends Component {
             }).then(response => {
                 if (response.data.change_password_successful) {
                     console.log("Changing password up was successful!")
-                    console.log(response.data.password_new)
-                    localStorage.setItem('pwd', response.data.password_new)
+                    console.log(response.data)
                     this.setState({message: 'Changing password up was successful!'});
                 } else {
                     console.log("Changing password failed!")

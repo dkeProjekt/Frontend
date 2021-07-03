@@ -16,8 +16,7 @@ import PrivateRoute from "./components/PrivateRoute";
 
 class App extends React.Component {
     componentDidMount() {
-        // here the local storage is cleared when the page is loaded, to make sure that no user is logged in when the page
-        // is loaded
+        // uncomment to clear local storage is when the page is loaded, in order to make sure that no one is logged in
         //localStorage.clear()
     }
 

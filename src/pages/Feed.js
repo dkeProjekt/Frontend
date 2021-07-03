@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PersonalFeed from "../components/PersonalFeed";
 import FeedOfFriends from "../components/FeedOfFriends";
-import MyFeedOfFriends from "../components/MyFeedOfFriends";
 
 let container = {
     border: '2px solid lightgray',
@@ -20,8 +19,7 @@ class Feed extends Component {
                 <h1>Personal Feed</h1>
                 <PersonalFeed/>
                 <h1>Feed of your friends</h1>
-                {/*<FeedOfFriends/>*/}
-                <MyFeedOfFriends/>
+                <FeedOfFriends/>
             </div>
         );
     }

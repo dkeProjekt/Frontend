@@ -10,7 +10,6 @@ export default class PersonalFeed extends React.Component {
     state = {
         currentUser: {sort: [{timeStamp: "desc"}],query: {match: { user: localStorage.getItem("user")}}},
         posts: [],
-        counter: 0
     }
 
     componentDidMount() {

@@ -38,6 +38,7 @@ class SignUpPage extends Component {
             }).then(response => {
                 if (response.data.signup_successful) {
                     console.log("Sign up in mongoDB was successful!")
+                    console.log(response.data)
                 } else {
                     console.log("Signing Up failed!")
                     this.setState({message: "Signing Up failed: " + response.data.error});
@@ -58,6 +59,7 @@ class SignUpPage extends Component {
             }).then(response => {
                 if (response.data.created) {
                     console.log("Sign up in neo4j was successful!")
+                    console.log(response.data)
                     this.setState({message: 'Signing Up was successful!'});
 
                     // after a successful signup, the user should automatically be logged in, therefore

@@ -2,16 +2,14 @@ import React from 'react';
 import axios from 'axios';
 import Moment from 'moment'
 
-export default class MyFeedOfFriends extends React.Component {
+export default class FeedOfFriends extends React.Component {
     constructor(props) {
         super(props);
     }
 
     state = {
         friends: [],
-        currentUser: {sort: [{timeStamp: "desc"}],query: {match: { user: localStorage.getItem("user")}}},
         posts: [],
-        counter: 0,
         username: localStorage.getItem("user")
     }
 

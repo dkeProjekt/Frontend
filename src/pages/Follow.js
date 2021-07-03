@@ -34,13 +34,9 @@ class Follow extends Component {
         }).then(response => {
             if(response.data.get_all_users_following_successful) {
                 console.log("Loading all users you follow was successful!")
+                console.log(response.data)
                 this.setState({message: 'Loading all users you follow was successful!'});
-                //console.log(response.data)
                 this.setState({users_following: JSON.parse(response.data.list_of_users_following)})
-                // console.log(this.users_following)
-                // for(var i = 0; i < this.state.users_following.length; i++) {
-                //     console.log(this.state.users_following[i])
-                // }
                 this.render()
             } else {
                 console.log("Loading all users you follow failed!")
@@ -61,13 +57,9 @@ class Follow extends Component {
         }).then(response => {
             if(response.data.get_all_users_successful) {
                 console.log("Loading all users was successful!")
+                console.log(response.data)
                 this.setState({message: 'Loading all users was successful!'});
-                // console.log(response.data.list_of_users)
                 this.setState({all_users: JSON.parse(response.data.list_of_users)})
-                // console.log(this.users)
-                // for(var i = 0; i < this.state.all_users.length; i++) {
-                //     console.log(this.state.all_users[i])
-                // }
                 this.render()
             } else {
                 console.log("Loading all users failed!")
@@ -118,6 +110,7 @@ class Follow extends Component {
         }).then(response => {
             if (response.data.follows) {
                 console.log("Follow was successful!")
+                console.log(response.data)
                 this.setState({message: 'You now follow ' + this.state.username_to_follow + "!"});
             } else {
                 console.log("Follow failed!")
@@ -144,6 +137,7 @@ class Follow extends Component {
         }).then(response => {
             if (response.data.unfollow) {
                 console.log("Unfollow was successful!")
+                console.log(response.data)
                 this.setState({message: 'You now do not follow ' + this.state.username_to_unfollow + " anymore!"});
             } else {
                 console.log("Unfollow failed!")
@@ -156,102 +150,75 @@ class Follow extends Component {
     };
 
     createUnfollowLabelsButtons = () => {
-        //if (this.state.users_following.length !== 0) {
-            let table = []
-            table.push(<tr><td><button onClick={this.getAllUsersFollowing}>Load all Users you follow</button></td></tr>)
-            if (this.state.users_following.length !== 0) {
-                table.push(<tr><td><label>Users you follow:</label></td></tr>)
-            }
-            // loop to create the rows
-            for (let i = 0; i < this.state.users_following.length; i++) {
-                let row = []
-                // create one row
-                row.push(<td><label>{this.state.users_following[i]} </label></td>)
-                // row.push(<td><button>Unfollow</button></td>)
-                // add the row to the table
-                table.push(<tr>{row}</tr>)
-            }
-            return table
-        /*} else {
-            return (<div>
-                <table>
-                    <tbody>
-                    <tr>
-                        <td><button onClick={this.getAllUsersFollowing}>Load all Users you follow</button></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>)
-        }*/
+        let table = []
+        table.push(<tr><td><button onClick={this.getAllUsersFollowing}>Load all Users you follow</button></td></tr>)
+        if (this.state.users_following.length !== 0) {
+            table.push(<tr><td><label>Users you follow:</label></td></tr>)
+        }
+        // loop to create the rows
+        for (let i = 0; i < this.state.users_following.length; i++) {
+            let row = []
+            // create one row
+            row.push(<td><label>{this.state.users_following[i]} </label></td>)
+            // add the row to the table
+            table.push(<tr>{row}</tr>)
+        }
+        return table
     }
 
     createFollowLabelsButtons = () => {
-        //if (this.state.all_users.length !== 0) {
-            let table = []
-            table.push(<tr><td><button onClick={this.getAllUsers}>Load all Users</button></td></tr>)
-            if (this.state.all_users.length !== 0) {
-                table.push(<tr><td><label>Registered users:</label></td></tr>)
-            }
-            // loop to create the rows
-            for (let i = 0; i < this.state.all_users.length; i++) {
-                let row = []
-                // create one row
-                row.push(<td><label>{this.state.all_users[i]} </label></td>)
-                // row.push(<td><button>Follow</button></td>)
-                // add the row to the table
-                table.push(<tr>{row}</tr>)
-            }
-            return table
-        /*} else {
-            return (<div>
-                <table>
-                    <tbody>
-                    <tr>
-                        <td><button onClick={this.getAllUsers}>Load all Users</button></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>)
-        }*/
+        let table = []
+        table.push(<tr><td><button onClick={this.getAllUsers}>Load all Users</button></td></tr>)
+        if (this.state.all_users.length !== 0) {
+            table.push(<tr><td><label>Registered users:</label></td></tr>)
+        }
+        // loop to create the rows
+        for (let i = 0; i < this.state.all_users.length; i++) {
+            let row = []
+            // create one row
+            row.push(<td><label>{this.state.all_users[i]} </label></td>)
+            // add the row to the table
+            table.push(<tr>{row}</tr>)
+        }
+        return table
     }
 
     render() {
         return (
             <div className="Follow">
-                {/*<h3>Here you can follow other persons.</h3>*/}
-                    <form onSubmit={this.handleSubmitFollow}>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td><label>Enter a User Name: </label></td>
-                                    <td><input type="text" data-test="search_username" value={this.state.username_to_follow} onChange={this.handleUsernameToFollowChange} /></td>
-                                    <td><input type="submit" value="Follow" data-test="submit" /></td>
-                                    <td><label>{this.state.message}</label></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
-                    <form onSubmit={this.handleSubmitUnfollow}>
-                        <table>
-                            <tbody>
+                <form onSubmit={this.handleSubmitFollow}>
+                    <table>
+                        <tbody>
                             <tr>
                                 <td><label>Enter a User Name: </label></td>
-                                <td><input type="text" data-test="search_username" value={this.state.username_to_unfollow} onChange={this.handleUsernameToUnfollowChange} /></td>
-                                <td><input type="submit" value="Unfollow" data-test="submit" /></td>
+                                <td><input type="text" data-test="search_username" value={this.state.username_to_follow} onChange={this.handleUsernameToFollowChange} /></td>
+                                <td><input type="submit" value="Follow" data-test="submit" /></td>
+                                <td><label>{this.state.message}</label></td>
                             </tr>
-                            </tbody>
-                        </table>
-                    </form>
-                    <table>
-                        <tbody>
-                            {this.createUnfollowLabelsButtons()}
                         </tbody>
                     </table>
+                </form>
+                <form onSubmit={this.handleSubmitUnfollow}>
                     <table>
                         <tbody>
-                            {this.createFollowLabelsButtons()}
+                        <tr>
+                            <td><label>Enter a User Name: </label></td>
+                            <td><input type="text" data-test="search_username" value={this.state.username_to_unfollow} onChange={this.handleUsernameToUnfollowChange} /></td>
+                            <td><input type="submit" value="Unfollow" data-test="submit" /></td>
+                        </tr>
                         </tbody>
                     </table>
+                </form>
+                <table>
+                    <tbody>
+                        {this.createUnfollowLabelsButtons()}
+                    </tbody>
+                </table>
+                <table>
+                    <tbody>
+                        {this.createFollowLabelsButtons()}
+                    </tbody>
+                </table>
             </div>
         );
     }

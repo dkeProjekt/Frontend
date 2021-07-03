@@ -9,7 +9,6 @@ class LoginPage extends Component {
         this.state = {
             username: '',
             password: '',
-            loggedIn: false,
             message: ''
         };
 
@@ -32,16 +31,13 @@ class LoginPage extends Component {
         }).then(response => {
             if(response.data.login_successful) {
                 console.log("Login was successful!")
-                this.setState({loggedIn: true});
-
-                // save the username and the user id in the local storage of the browser
+                console.log(response.data)
+                // save the username in the local storage of the browser
                 // the user is kept logged in until the local storage is cleared
                 // reading from the local storage ( with localStorage.getItem('user')), we can
                 // check which user is logged in and use this to personalize content of the personal pages
                 localStorage.setItem('user', response.data.username)
-                localStorage.setItem('id', response.data.id)
                 // console.log(localStorage.getItem('user'))
-                // console.log(localStorage.getItem('id'))
                 this.setState({message: 'Login was successful!'});
             } else {
                 console.log("Login failed!")
