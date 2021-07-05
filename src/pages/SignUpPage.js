@@ -10,7 +10,9 @@ class SignUpPage extends Component {
             username: '',
             password: '',
             passwordRep: '',
-            email: ''
+            email: '',
+            signup_mongo_successful: false,
+            signup_neo4j_successful: false,
         };
 
         this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -39,14 +41,20 @@ class SignUpPage extends Component {
                 if (response.data.signup_successful) {
                     console.log("Sign up in mongoDB was successful!")
                     console.log(response.data)
+                    this.setState({signup_mongo_successful: true});
                 } else {
                     console.log("Signing Up failed!")
                     this.setState({message: "Signing Up failed: " + response.data.error});
+                    this.setState({signup_mongo_successful: false});
                 }
             }).catch(error => {
                 console.log("Signing Up failed!")
                 this.setState({message: "Signing Up: " + error});
+                this.setState({signup_mongo_successful: false});
             });
+            if (!this.state.siblingWithSimilarExtensionFound) {
+                return;
+            }
 
             // send username to Follow Service (microservice creates entry in follow DB (neo4j))
             await axios({
@@ -61,6 +69,7 @@ class SignUpPage extends Component {
                     console.log("Sign up in neo4j was successful!")
                     console.log(response.data)
                     this.setState({message: 'Signing Up was successful!'});
+                    this.setState({signup_neo4j_successful: true});
 
                     // after a successful signup, the user should automatically be logged in, therefore
                     // the username and the id is saved in the local storage (see loginPage for a explanation of local storage)
@@ -68,10 +77,12 @@ class SignUpPage extends Component {
                 } else {
                     console.log("Signing Up failed!")
                     this.setState({message: "Signing Up failed: " + response.data.error});
+                    this.setState({signup_neo4j_successful: false});
                 }
             }).catch(error => {
                 console.log("Signing Up failed!")
                 this.setState({message: "Signing Up: " + error});
+                this.setState({signup_neo4j_successful: false});
             });
 
 
