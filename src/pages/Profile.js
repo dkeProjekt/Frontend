@@ -15,8 +15,6 @@ class Profile extends Component {
     }
 
     async handleShowData() {
-        console.log(this.state.username)
-        console.log(this.state.id)
         const response = await axios({
             method: 'POST',
             url: 'http://localhost:5003/get_personal_data',
@@ -27,6 +25,7 @@ class Profile extends Component {
         }).then(response => {
             if (response.data.get_data_successful) {
                 console.log("Receiving the personal data was successful!")
+                console.log(response.data)
                 this.setState({message: 'Receiving the personal data was successful!'});
                 this.setState({username_show: response.data.username})
                 this.setState({email: response.data.email})
