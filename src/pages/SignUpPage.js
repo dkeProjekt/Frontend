@@ -52,7 +52,7 @@ class SignUpPage extends Component {
                 this.setState({message: "Signing Up: " + error});
                 this.setState({signup_mongo_successful: false});
             });
-            if (!this.state.siblingWithSimilarExtensionFound) {
+            if (!this.state.signup_mongo_successful) {
                 return;
             }
 
