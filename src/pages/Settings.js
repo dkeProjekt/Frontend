@@ -33,9 +33,9 @@ class Settings extends Component {
                 headers: '',
             }).then(response => {
                 if (response.data.change_password_successful) {
-                    console.log("Changing password up was successful!")
+                    console.log("Changing password was successful!")
                     console.log(response.data)
-                    this.setState({message: 'Changing password up was successful!'});
+                    this.setState({message: 'Changing password was successful!'});
                 } else {
                     console.log("Changing password failed!")
                     this.setState({message: "Changing password failed: " + response.data.error});
